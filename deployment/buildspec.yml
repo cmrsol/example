@@ -4,14 +4,14 @@ phases:
   install:
     commands:
       - echo Installing tools
-      - pip install -Ur code_pipeline/requirements.txt
+      - pip install -Ur deployment/requirements.txt
   pre_build:
     commands:
       - echo Nothing to do in pre_build
   build:
     commands:
       - echo Build started at $(date)
-      - ./code_pipeline/build.sh
+      - ./deployment/build.sh
       - echo Build completed at $(date)
   post_build:
     commands:
