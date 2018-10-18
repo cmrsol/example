@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing tools
+      - pip install -Ur code_pipeline/requirements.txt
+  pre_build:
+    commands:
+      - echo Nothing to do in pre_build
+  build:
+    commands:
+      - echo Build started at $(date)
+      - ./code_pipeline/build.sh
+      - echo Build completed at $(date)
+  post_build:
+    commands:
+      - echo Nothing to do in post_build
