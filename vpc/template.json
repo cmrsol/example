@@ -286,42 +286,42 @@
         "devVPC": {
             "Description": "The development VPC",
             "Value": {"Ref": "devVPC"},
-            "Export": {"Name": "appVPCV1"}
+            "Export": {"Name": "appVPCV2"}
         },
         "devVPCCidr": {
             "Description": "The development VPC CIDR block",
             "Value": {"Ref": "theCIDR"},
-            "Export": {"Name": "appVPCCidrV1"}
+            "Export": {"Name": "appVPCCidrV2"}
         },
         "publicSubnetOne": {
             "Description": "The first public subnet",
             "Value": {"Ref": "publicSubnetOne"},
-            "Export": {"Name": "publicSubnetOneV1"}
+            "Export": {"Name": "publicSubnetOneV2"}
         },
         "publicSubnetTwo": {
             "Description": "The second public subnet",
             "Value": {"Ref": "publicSubnetTwo"},
-            "Export": {"Name": "publicSubnetTwoV1"}
+            "Export": {"Name": "publicSubnetTwoV2"}
         },
         "publicSubnetThree": {
             "Description": "The third public subnet",
             "Value": {"Ref": "publicSubnetThree"},
-            "Export": {"Name": "publicSubnetThreeV1"}
+            "Export": {"Name": "publicSubnetThreeV2"}
         },
         "privateSubnetOne": {
             "Description": "The first private subnet",
             "Value": {"Ref": "privateSubnetOne"},
-            "Export": {"Name": "privateSubnetOneV1"}
+            "Export": {"Name": "privateSubnetOneV2"}
         },
         "privateSubnetTwo": {
             "Description": "The second private subnet",
             "Value": {"Ref": "privateSubnetTwo"},
-            "Export": {"Name": "privateSubnetTwoV1"}
+            "Export": {"Name": "privateSubnetTwoV2"}
         },
         "privateSubnetThree": {
             "Description": "The third private subnet",
             "Value": {"Ref": "privateSubnetThree"},
-            "Export": {"Name": "privateSubnetThreeV1"}
+            "Export": {"Name": "privateSubnetThreeV2"}
         }
     }
 }
