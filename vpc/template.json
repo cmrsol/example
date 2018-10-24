@@ -1,0 +1,327 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Development VPC",
+    "Parameters": {
+        "azOne": {
+            "Description": "The AZ for the first subnet",
+            "Type": "String"
+        },
+        "azTwo": {
+            "Description": "The AZ for the second subnet",
+            "Type": "String"
+        },
+        "azThree": {
+            "Description": "The AZ for the third subnet",
+            "Type": "String"
+        },
+        "IGWname": {
+            "Description": "The name of the internet gateway",
+            "Type": "String"
+        },
+        "privateRouteTableName": {
+            "Description": "The name of the private route table",
+            "Type": "String"
+        },
+        "publicRouteTableName": {
+            "Description": "The name of the public route table",
+            "Type": "String"
+        },
+        "publicSubnetCIDROne": {
+            "Description": "The CIDR block of our new friend",
+            "Type": "String"
+        },
+        "publicSubnetCIDRTwo": {
+            "Description": "The CIDR block of our new friend",
+            "Type": "String"
+        },
+        "publicSubnetCIDRThree": {
+            "Description": "The CIDR block of our new friend",
+            "Type": "String"
+        },
+        "privateSubnetCIDROne": {
+            "Description": "The CIDR block of our new friend",
+            "Type": "String"
+        },
+        "privateSubnetCIDRTwo": {
+            "Description": "The CIDR block of our new friend",
+            "Type": "String"
+        },
+        "privateSubnetCIDRThree": {
+            "Description": "The CIDR block of our new friend",
+            "Type": "String"
+        },
+        "theCIDR": {
+            "Description": "The CIDR block of our new friend",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "devVPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "theCIDR"
+                },
+                "EnableDnsHostnames": "false",
+                "EnableDnsSupport": "true"
+            }
+        },
+        "theInternetGateway" : {
+            "Type" : "AWS::EC2::InternetGateway",
+            "Properties" : {
+            "Tags" : [ {"Key" : "Name", "Value" : {"Ref": "IGWname"}}]
+            }
+        },
+        "vpcIgwAssociation" : {
+            "Type" : "AWS::EC2::VPCGatewayAttachment",
+            "DependsOn": [
+                "devVPC",
+                "theInternetGateway"
+            ],
+            "Properties" : {
+                "VpcId" : { "Ref" : "devVPC" },
+                "InternetGatewayId" : { "Ref" : "theInternetGateway" }
+            }
+        },
+        "publicSubnetOne": {
+            "Type": "AWS::EC2::Subnet",
+            "DependsOn": "devVPC",
+            "Properties": {
+                "AvailabilityZone": {"Ref": "azOne"},
+                "CidrBlock": {"Ref": "publicSubnetCIDROne"},
+                "MapPublicIpOnLaunch": "false",
+                "VpcId": {
+                    "Ref": "devVPC"
+                }
+            }
+        },
+        "publicSubnetTwo": {
+            "Type": "AWS::EC2::Subnet",
+            "DependsOn": "devVPC",
+            "Properties": {
+                "AvailabilityZone": {"Ref": "azTwo"},
+                "CidrBlock": {"Ref": "publicSubnetCIDRTwo"},
+                "MapPublicIpOnLaunch": "false",
+                "VpcId": {
+                    "Ref": "devVPC"
+                }
+            }
+        },
+        "publicSubnetThree": {
+            "Type": "AWS::EC2::Subnet",
+            "DependsOn": "devVPC",
+            "Properties": {
+                "AvailabilityZone": {"Ref": "azThree"},
+                "CidrBlock": {"Ref": "publicSubnetCIDRThree"},
+                "MapPublicIpOnLaunch": "false",
+                "VpcId": {
+                    "Ref": "devVPC"
+                }
+            }
+        },
+        "privateSubnetOne": {
+            "Type": "AWS::EC2::Subnet",
+            "DependsOn": "devVPC",
+            "Properties": {
+                "AvailabilityZone": {"Ref": "azOne"},
+                "CidrBlock": {"Ref": "privateSubnetCIDROne"},
+                "MapPublicIpOnLaunch": "false",
+                "VpcId": {
+                    "Ref": "devVPC"
+                }
+            }
+        },
+        "privateSubnetTwo": {
+            "Type": "AWS::EC2::Subnet",
+            "DependsOn": "devVPC",
+            "Properties": {
+                "AvailabilityZone": {"Ref": "azTwo"},
+                "CidrBlock": {"Ref": "privateSubnetCIDRTwo"},
+                "MapPublicIpOnLaunch": "false",
+                "VpcId": {
+                    "Ref": "devVPC"
+                }
+            }
+        },
+        "privateSubnetThree": {
+            "Type": "AWS::EC2::Subnet",
+            "DependsOn": "devVPC",
+            "Properties": {
+                "AvailabilityZone": {"Ref": "azThree"},
+                "CidrBlock": {"Ref": "privateSubnetCIDRThree"},
+                "MapPublicIpOnLaunch": "false",
+                "VpcId": {
+                    "Ref": "devVPC"
+                }
+            }
+        },
+        "natgwEIP": {
+            "Type" : "AWS::EC2::EIP",
+            "Properties" : {
+                "Domain" : "vpc"
+            }
+        },
+        "natgw" : {
+            "DependsOn" : "natgwEIP",
+            "Type" : "AWS::EC2::NatGateway",
+            "Properties" : {
+            "AllocationId" : { "Fn::GetAtt" : ["natgwEIP", "AllocationId"]},
+            "SubnetId" : { "Ref" : "publicSubnetOne"}
+            }
+        },
+        "publicRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+                "VpcId" : { "Ref" : "devVPC" },
+                "Tags" : [
+                    { "Key" : "Name", "Value" : {"Ref": "publicRouteTableName"} }
+                ]
+            }
+        },
+        "privateRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+                "VpcId" : { "Ref" : "devVPC" },
+                "Tags" : [
+                    { "Key" : "Name", "Value" : {"Ref": "privateRouteTableName"} }
+                ]
+            }
+        },
+        "publicRouteToTheUniverse": {
+            "Type": "AWS::EC2::Route",
+            "DependsOn": [
+                "publicRouteTable",
+                "theInternetGateway"
+            ],
+            "Properties": {
+                "RouteTableId": { "Ref": "publicRouteTable" },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "theInternetGateway"
+                }
+            }
+        },
+        "privateRouteToTheUniverse": {
+            "Type": "AWS::EC2::Route",
+            "DependsOn": [
+                "privateRouteTable",
+                "natgw"
+            ],
+            "Properties": {
+                "RouteTableId": { "Ref": "privateRouteTable" },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "NatGatewayId": {
+                    "Ref": "natgw"
+                }
+            }
+        },
+        "publicSubnetOneRoute": {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "DependsOn": [
+                "publicRouteTable",
+                "publicSubnetOne"
+            ],
+            "Properties" : {
+                "RouteTableId" : {"Ref": "publicRouteTable"},
+                "SubnetId" : {"Ref": "publicSubnetOne"}
+            }
+        },
+        "publicSubnetTwoRoute": {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "DependsOn": [
+                "publicRouteTable",
+                "publicSubnetTwo"
+            ],
+            "Properties" : {
+                "RouteTableId" : {"Ref": "publicRouteTable"},
+                "SubnetId" : {"Ref": "publicSubnetTwo"}
+            }
+        },
+        "publicSubnetThreeRoute": {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "DependsOn": [
+                "publicRouteTable",
+                "publicSubnetThree"
+            ],
+            "Properties" : {
+                "RouteTableId" : {"Ref": "publicRouteTable"},
+                "SubnetId" : {"Ref": "publicSubnetThree"}
+            }
+        },
+        "privateSubnetOneRoute": {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "DependsOn": [
+                "privateRouteTable",
+                "privateSubnetOne"
+            ],
+            "Properties" : {
+                "RouteTableId" : {"Ref": "privateRouteTable"},
+                "SubnetId" : {"Ref": "privateSubnetOne"}
+            }
+        },
+        "privateSubnetTwoRoute": {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "DependsOn": [
+                "privateRouteTable",
+                "privateSubnetTwo"
+            ],
+            "Properties" : {
+                "RouteTableId" : {"Ref": "privateRouteTable"},
+                "SubnetId" : {"Ref": "privateSubnetTwo"}
+            }
+        },
+        "privateSubnetThreeRoute": {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "DependsOn": [
+                "privateRouteTable",
+                "privateSubnetThree"
+            ],
+            "Properties" : {
+                "RouteTableId" : {"Ref": "privateRouteTable"},
+                "SubnetId" : {"Ref": "privateSubnetThree"}
+            }
+        }
+    },
+    "Outputs": {
+        "devVPC": {
+            "Description": "The development VPC",
+            "Value": {"Ref": "devVPC"},
+            "Export": {"Name": "appVPCV1"}
+        },
+        "devVPCCidr": {
+            "Description": "The development VPC CIDR block",
+            "Value": {"Ref": "theCIDR"},
+            "Export": {"Name": "appVPCCidrV1"}
+        },
+        "publicSubnetOne": {
+            "Description": "The first public subnet",
+            "Value": {"Ref": "publicSubnetOne"},
+            "Export": {"Name": "publicSubnetOneV1"}
+        },
+        "publicSubnetTwo": {
+            "Description": "The second public subnet",
+            "Value": {"Ref": "publicSubnetTwo"},
+            "Export": {"Name": "publicSubnetTwoV1"}
+        },
+        "publicSubnetThree": {
+            "Description": "The third public subnet",
+            "Value": {"Ref": "publicSubnetThree"},
+            "Export": {"Name": "publicSubnetThreeV1"}
+        },
+        "privateSubnetOne": {
+            "Description": "The first private subnet",
+            "Value": {"Ref": "privateSubnetOne"},
+            "Export": {"Name": "privateSubnetOneV1"}
+        },
+        "privateSubnetTwo": {
+            "Description": "The second private subnet",
+            "Value": {"Ref": "privateSubnetTwo"},
+            "Export": {"Name": "privateSubnetTwoV1"}
+        },
+        "privateSubnetThree": {
+            "Description": "The third private subnet",
+            "Value": {"Ref": "privateSubnetThree"},
+            "Export": {"Name": "privateSubnetThreeV1"}
+        }
+    }
+}
