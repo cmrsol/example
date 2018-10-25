@@ -138,6 +138,14 @@ Resources:
         - PolicyDocument:
             Statement:
               - Action:
+                  - ssm:Describe*
+                Effect: Allow
+                Resource:
+                  - '*'
+          PolicyName: ssm-describe-perms
+        - PolicyDocument:
+            Statement:
+              - Action:
                   - ecs:*
                 Effect: Allow
                 Resource:
