@@ -30,8 +30,7 @@ elif [ "${mode}" == "build_image" ]; then
 elif [ "${mode}" == "deploy_fargate" ]; then
     echo Deploying Fargate Cluster
     cd deployment
-    $(iam_role_assumer assume -r ${build_role} --region ${region})
-    stackility upsert -i config/${target_env}.ini
+    stackility upsert -i config/prod.ini
 else
     echo "Build mode not set"
     exit 1

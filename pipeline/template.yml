@@ -88,6 +88,40 @@ Resources:
   ##############################################################################
   #
   ##############################################################################
+  fargateDeploy:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: exampleDeploy
+      Description: Deploy the Example Docker image to ECS/Fargate
+      ServiceRole:
+        Fn::ImportValue: exampleDeployRoleArnV1
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image:
+          Ref: theBuilderImage
+        EnvironmentVariables:
+          - Name: mode
+            Value: deploy_fargate
+          - Name: region
+            Value: us-east-1
+          - Name: image_name
+            Value: example-server
+          - Name: module_name
+            Value: example
+          - Name: account_id
+            Value:
+              Ref: AWS::AccountId
+      Source:
+        BuildSpec: code_pipeline/buildspec.yml
+        Type: CODEPIPELINE
+      TimeoutInMinutes: 60
+
+  ##############################################################################
+  #
+  ##############################################################################
   thePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
@@ -147,3 +181,20 @@ Resources:
                 - Name: theSources
               OutputArtifacts:
                 - Name: imageOutput
+
+        - Name: DeployCluster
+          Actions:
+            - Name: ExampleCluster
+              RunOrder: 1
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Configuration:
+                ProjectName:
+                  Ref: fargateDeploy
+              InputArtifacts:
+                - Name: theSources
+              OutputArtifacts:
+                - Name: deployOutput
