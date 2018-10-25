@@ -1,0 +1,147 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Role for the Example project
+Parameters:
+  managedPolicies:
+    Type: CommaDelimitedList
+  roleName:
+    Type: String
+Resources:
+  exampleRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              AWS:
+                - Fn::Join:
+                    - ''
+                    - - 'arn:aws:iam::'
+                      - Ref: AWS::AccountId
+                      - :root
+              Service:
+                - ec2.amazonaws.com
+                - lambda.amazonaws.com
+                - ecs-tasks.amazonaws.com
+                - events.amazonaws.com
+                - apigateway.amazonaws.com
+                - application-autoscaling.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+        Ref: managedPolicies
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - logs:*
+                Effect: Allow
+                Resource:
+                  - Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:ECSLogGroup-example*
+            Version: '2012-10-17'
+          PolicyName: example-logs-access
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - logs:Describe*
+                Effect: Allow
+                Resource: '*'
+            Version: '2012-10-17'
+          PolicyName: example-describe-logs
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - sts:AssumeRole
+                Effect: Allow
+                Resource:
+                  - Fn::Join:
+                      - ''
+                      - - 'arn:aws:iam::'
+                        - Ref: AWS::AccountId
+                        - :role/
+                        - Ref: roleName
+                  - Fn::Join:
+                      - ''
+                      - - 'arn:aws:sts::'
+                        - Ref: AWS::AccountId
+                        - :assumed-role/
+                        - Ref: roleName
+                        - /assumeOwnRole
+            Version: '2012-10-17'
+          PolicyName: assume-self
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - sqs:*
+                Effect: Allow
+                Resource:
+                  - Fn::Join:
+                      - ':'
+                      - - arn:aws:sqs
+                        - Ref: AWS::Region
+                        - Ref: AWS::AccountId
+                        - example*
+                  - Fn::Join:
+                      - ':'
+                      - - arn:aws:sqs
+                        - Ref: AWS::Region
+                        - Ref: AWS::AccountId
+                        - fastcorn*
+            Version: '2012-10-17'
+          PolicyName: example-sqs-access
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - application-autoscaling:*
+                  - cloudwatch:DescribeAlarms
+                  - cloudwatch:PutMetricAlarm
+                  - ecs:DescribeServices
+                  - ecs:UpdateService
+                Effect: Allow
+                Resource: '*'
+          PolicyName: service-autoscaling
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - ssm:GetParameter
+                Effect: Allow
+                Resource:
+                  - Fn::Join:
+                      - ':'
+                      - - arn:aws:ssm
+                        - Ref: AWS::Region
+                        - Ref: AWS::AccountId
+                        - parameter/example*
+          PolicyName: ssm-read-perms
+      RoleName:
+        Ref: roleName
+  exampleEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    DependsOn: exampleRole
+    Properties:
+      Roles:
+        - Ref: exampleRole
+      InstanceProfileName:
+        Ref: roleName
+Outputs:
+  exampleRole:
+    Description: The Example project role
+    Value:
+      Ref: exampleRole
+    Export:
+      Name: exampleRoleV2
+  exampleRoleArn:
+    Description: The Example project role ARN
+    Value:
+      Fn::GetAtt:
+        - exampleRole
+        - Arn
+    Export:
+      Name: exampleRoleArnV2
+  exampleEC2InstanceProfile:
+    Description: The Example instance profile
+    Value:
+      Ref: exampleEC2InstanceProfile
+    Export:
+      Name: exampleEC2InstanceProfileV2
