@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
-echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 if [ -z "${region}" ]; then
     region=us-east-1
+fi
+
+if [ -z "${cluster_name}" ]; then
+     cluster_name=example-cluster
 fi
 
 version=$(python -c "import ${module_name}; print(${module_name}.__version__)" 2>/dev/null)
 echo "Build environment: "
 env
+echo
 
 if [ "${mode}" == "build_wheel" ]; then
     echo "Building the wheel"
@@ -31,6 +35,8 @@ elif [ "${mode}" == "deploy_fargate" ]; then
     echo Deploying Fargate Cluster
     cd deployment
     stackility upsert -i config/prod.ini
+    service_name=$(aws ecs list-services --cluster ${cluster_name} --output text | awk -F'/' '{print $2}')
+    aws ecs update-service --force-new-deployment --service ${service_name} --cluster ${cluster_name}
 else
     echo "Build mode not set"
     exit 1
