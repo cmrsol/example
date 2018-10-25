@@ -36,8 +36,12 @@ Resources:
         Image:
           Ref: theBuilderImage
         EnvironmentVariables:
-          - Name: answer
-            Value: 42
+          - Name: mode
+            Value: build_wheel
+          - Name: region
+            Value: us-east-1
+          - Name: image_name
+            Value: example-server
       Source:
         BuildSpec: deployment/buildspec.yml
         Type: CODEPIPELINE

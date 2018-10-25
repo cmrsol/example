@@ -32,7 +32,7 @@ Resources:
   wheelProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: mantis-wheel-build
+      Name: example-wheel-build
       Description: Build and publish the Mantis wheel
       ServiceRole:
         Ref: buildRole

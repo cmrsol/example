@@ -280,6 +280,48 @@
                 "RouteTableId" : {"Ref": "privateRouteTable"},
                 "SubnetId" : {"Ref": "privateSubnetThree"}
             }
+        },
+        "defaultSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId" : { "Ref": "devVPC" },
+                "GroupDescription": "Default SG"
+            }
+        },
+        "defaultOutboundRule": {
+            "Type": "AWS::EC2::SecurityGroupEgress",
+            "Properties": {
+            "IpProtocol": "tcp",
+            "FromPort": 0,
+            "ToPort": 65535,
+            "DestinationSecurityGroupId": {
+                    "Fn::GetAtt": [
+                    "defaultSecurityGroup",
+                    "GroupId"
+                ]
+            },
+            "GroupId": { "Fn::GetAtt": [ "defaultSecurityGroup", "GroupId" ] }
+            }
+        },
+        "defaultInboundRule": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "FromPort": 0,
+                "ToPort": 65535,
+                "GroupId": {
+                    "Fn::GetAtt": [
+                        "defaultSecurityGroup",
+                        "GroupId"
+                    ]
+                },
+                "IpProtocol": "-1",
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                        "defaultSecurityGroup",
+                        "GroupId"
+                    ]
+                }
+            }
         }
     },
     "Outputs": {
@@ -292,6 +334,11 @@
             "Description": "The development VPC CIDR block",
             "Value": {"Ref": "theCIDR"},
             "Export": {"Name": "appVPCCidrV2"}
+        },
+        "defaultSecurityGroup": {
+            "Description": "The default security group",
+            "Value": {"Ref": "defaultSecurityGroup"},
+            "Export": {"Name": "defaultSecurityGroupV2"}
         },
         "publicSubnetOne": {
             "Description": "The first public subnet",
