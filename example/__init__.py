@@ -9,19 +9,19 @@ logging.basicConfig(
 )
 
 logging.info('logging initialized')
-__title__ = 'mantis2'
-__version__ = '0.5.0'
-__author__ = 'Mantis Team'
-__license__ = 'Proprietary, (c) DuPont Pioneer'
+__title__ = 'example'
+__version__ = '0.0.1'
+__author__ = 'Chuck Muckamuck'
+__license__ = 'MIT'
 __copyright__ = '(c) {}'.format(datetime.now().year)
-__url__ = 'ssh://git@bitbucket.phibred.com:7999/pimg/mantis.git'
+__url__ = 'https://github.com'
 __description__ = """
 Mauris nec consequat urna, vel maximus erat. Nullam nulla diam,
 tincidunt in consectetur eget, sagittis a sapien. Nulla consequat
-venenatis ipsum, vel lacinia magna eleifend a. Phasellus at
 elementum tellus. Vestibulum sapien nisi, viverra non enim sed,
 lobortis hendrerit lacus. Nullam porttitor faucibus vehicula.
-Quisque euismod sem felis, id malesuada tortor feugiat id. Sed
+Venenatis ipsum, vel lacinia magna eleifend a. Phasellus at
+quisque euismod sem felis, id malesuada tortor feugiat id. Sed
 dictum ligula massa, ac mollis nulla malesuada quis. Vivamus in
 metus ante.
 """
