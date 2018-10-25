@@ -11,7 +11,7 @@ env
 
 if [ "${mode}" == "build_wheel" ]; then
     echo "Building the wheel"
-    python code_pipeline/verify_unique_version.py ${image_name} ${version}
+    python deployment/verify_unique_version.py ${image_name} ${version}
     python setup.py sdist bdist_wheel
     aws s3 dist/example-${version}-py3-none-any.whl cp static.mknote.us/artifacts/example/example-${version}-py3-none-any.whl
 elif [ "${mode}" == "build_image" ]; then
@@ -29,7 +29,7 @@ elif [ "${mode}" == "build_image" ]; then
     docker push ${account_id}.dkr.ecr.${region}.amazonaws.com/${image_name}:${version}
 elif [ "${mode}" == "deploy_fargate" ]; then
     echo Deploying Fargate Cluster
-    cd code_pipeline
+    cd deployment
     $(iam_role_assumer assume -r ${build_role} --region ${region})
     stackility upsert -i config/${target_env}.ini
 else
