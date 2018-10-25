@@ -1,23 +1,20 @@
 #!/bin/bash
 set -e
-set -x
+set +x
 
-echo "################################################################"
-env
-echo "################################################################"
 
 if [ -z "${region}" ]; then
     region=us-east-1
 fi
 
 version=$(python -c "import ${module_name}; print(${module_name}.__version__)" 2>/dev/null)
+echo "Build environment: "; env
 
 if [ "${mode}" == "build_wheel" ]; then
     echo "Building the wheel"
     python code_pipeline/verify_unique_version.py ${image_name} ${version}
-    python code_pipeline/dot_pypirc.py > /root/.pypirc
     python setup.py sdist bdist_wheel
-    twine upload -r local dist/*
+    aws s3 dist/example-${version}-py3-none-any.whl cp static.mknote.us/artifacts/example/example-${version}-py3-none-any.whl
 elif [ "${mode}" == "build_image" ]; then
     echo Logging in to Amazon ECR in region=${region}
     $(aws ecr get-login --no-include-email --region ${region})
