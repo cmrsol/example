@@ -19,7 +19,7 @@ elif [ "${mode}" == "build_image" ]; then
     $(aws ecr get-login --no-include-email --region ${region})
 
     echo "Building the docker image"
-    (cd runner-image; docker build -t ${image_name} --build-arg VERSION=${version} .)
+    (cd docker-image; docker build -t ${image_name} --build-arg VERSION=${version} .)
 
     echo "Publising the docker image"
     docker tag ${image_name} ${account_id}.dkr.ecr.${region}.amazonaws.com/${image_name}:latest
