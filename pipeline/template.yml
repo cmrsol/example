@@ -29,7 +29,7 @@ Resources:
       Name: example-wheel-build
       Description: Build and publish the Example wheel
       ServiceRole:
-        Fn::ImportValue: exampleDeployRoleArnV1
+        Fn::ImportValue: exampleDeployRoleArnV2
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -60,7 +60,7 @@ Resources:
       Name: example-image-build
       Description: Build and publish the Example image to ECR
       ServiceRole:
-        Fn::ImportValue: exampleDeployRoleArnV1
+        Fn::ImportValue: exampleDeployRoleArnV2
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -94,7 +94,7 @@ Resources:
       Name: exampleDeploy
       Description: Deploy the Example Docker image to ECS/Fargate
       ServiceRole:
-        Fn::ImportValue: exampleDeployRoleArnV1
+        Fn::ImportValue: exampleDeployRoleArnV2
       Artifacts:
         Type: CODEPIPELINE
       Environment:
@@ -115,7 +115,7 @@ Resources:
             Value:
               Ref: AWS::AccountId
       Source:
-        BuildSpec: code_pipeline/buildspec.yml
+        BuildSpec: deployment/buildspec.yml
         Type: CODEPIPELINE
       TimeoutInMinutes: 60
 
@@ -128,7 +128,7 @@ Resources:
       Name:
         Ref: pipelineName
       RoleArn:
-        Fn::ImportValue: exampleDeployRoleArnV1
+        Fn::ImportValue: exampleDeployRoleArnV2
       ArtifactStore:
         Type: S3
         Location:

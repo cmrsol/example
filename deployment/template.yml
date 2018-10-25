@@ -33,7 +33,7 @@ Resources:
       GroupDescription: Allow ECS connections
       GroupName: example-host
       VpcId:
-        Fn::ImportValue: appVPCV1
+        Fn::ImportValue: appVPCV2
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '80'
@@ -96,7 +96,7 @@ Resources:
       Cpu:
         Ref: cpuAllocation
       ExecutionRoleArn:
-        Fn::ImportValue: exampleRoleArnV1
+        Fn::ImportValue: exampleRoleArnV2
       Family:
         Fn::Join:
           - ''
@@ -108,7 +108,7 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       TaskRoleArn:
-        Fn::ImportValue: exampleRoleArnV1
+        Fn::ImportValue: exampleRoleArnV2
   exampleALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -117,9 +117,9 @@ Resources:
         - Key: idle_timeout.timeout_seconds
           Value: '30'
       Subnets:
-        - Fn::ImportValue: publicSubnetOneV1
-        - Fn::ImportValue: publicSubnetTwoV1
-        - Fn::ImportValue: publicSubnetThreeV1
+        - Fn::ImportValue: publicSubnetOneV2
+        - Fn::ImportValue: publicSubnetTwoV2
+        - Fn::ImportValue: publicSubnetThreeV2
       SecurityGroups:
         - Ref: exampleSecuityGroup
   exampleTargetGroup:
@@ -137,7 +137,7 @@ Resources:
       UnhealthyThresholdCount: 2
       TargetType: ip
       VpcId:
-        Fn::ImportValue: appVPCV1
+        Fn::ImportValue: appVPCV2
   exampleALBListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
@@ -172,9 +172,9 @@ Resources:
           SecurityGroups:
             - Ref: exampleSecuityGroup
           Subnets:
-            - Fn::ImportValue: privateSubnetOneV1
-            - Fn::ImportValue: privateSubnetTwoV1
-            - Fn::ImportValue: privateSubnetThreeV1
+            - Fn::ImportValue: privateSubnetOneV2
+            - Fn::ImportValue: privateSubnetTwoV2
+            - Fn::ImportValue: privateSubnetThreeV2
       TaskDefinition:
         Ref: taskDefinition
   exampleServiceScalingTarget:
@@ -195,7 +195,7 @@ Resources:
                 - exampleService
                 - Name
       RoleARN:
-        Fn::ImportValue: exampleRoleArnV1
+        Fn::ImportValue: exampleRoleArnV2
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
   exampleServiceScalingPolicy:

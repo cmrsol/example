@@ -192,17 +192,17 @@
         "exampleRole": {
             "Description": "The Example project role",
             "Value": { "Ref": "exampleRole" },
-            "Export": { "Name": "exampleRoleV1" }
+            "Export": { "Name": "exampleRoleV2" }
         },
         "exampleRoleArn": {
             "Description": "The Example project role ARN",
             "Value": { "Fn::GetAtt": [ "exampleRole", "Arn" ] },
-            "Export": { "Name": "exampleRoleArnV1" }
+            "Export": { "Name": "exampleRoleArnV2" }
         },
         "exampleEC2InstanceProfile": {
             "Description": "The Example instance profile",
             "Value": { "Ref": "exampleEC2InstanceProfile" },
-            "Export": { "Name": "exampleEC2InstanceProfileV1" }
+            "Export": { "Name": "exampleEC2InstanceProfileV2" }
         }
     }
 }

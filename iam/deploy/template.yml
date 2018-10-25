@@ -159,7 +159,7 @@ Outputs:
     Value:
       Ref: exampleDeployRole
     Export:
-      Name: exampleDeployRoleV1
+      Name: exampleDeployRoleV2
   exampleDeployRoleArn:
     Description: The Example deploy role ARN
     Value:
@@ -167,4 +167,4 @@ Outputs:
         - exampleDeployRole
         - Arn
     Export:
-      Name: exampleDeployRoleArnV1
+      Name: exampleDeployRoleArnV2
