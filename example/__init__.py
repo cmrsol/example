@@ -10,7 +10,7 @@ logging.basicConfig(
 
 logging.info('logging initialized')
 __title__ = 'example'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __author__ = 'Chuck Muckamuck'
 __license__ = 'MIT'
 __copyright__ = '(c) {}'.format(datetime.now().year)
