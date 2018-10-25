@@ -11,7 +11,7 @@ import os
 import time #noqa
 from flask import Flask
 
-version = '0.1.3'
+version = '0.1.4'
 
 
 def get_fs_freespace(pathname):
