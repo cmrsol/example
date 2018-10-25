@@ -14,6 +14,8 @@ Parameters:
     Type: String
   theBuilderImage:
     Type: String
+  theDockerBuilder:
+    Type: String
   theDeployerImage:
     Type: String
 
@@ -44,6 +46,40 @@ Resources:
             Value: example-server
           - Name: module_name
             Value: example
+      Source:
+        BuildSpec: deployment/buildspec.yml
+        Type: CODEPIPELINE
+      TimeoutInMinutes: 60
+
+  ##############################################################################
+  #
+  ##############################################################################
+  imageProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: example-image-build
+      Description: Build and publish the Example image to ECR
+      ServiceRole:
+        Fn::ImportValue: exampleDeployRoleArnV1
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image:
+          Ref: theDockerBuilder
+        EnvironmentVariables:
+          - Name: mode
+            Value: build_image
+          - Name: region
+            Value: us-east-1
+          - Name: image_name
+            Value: example-server
+          - Name: module_name
+            Value: example
+          - Name: account_id
+            Value:
+              Ref: AWS::AccountId
       Source:
         BuildSpec: deployment/buildspec.yml
         Type: CODEPIPELINE
@@ -97,3 +133,17 @@ Resources:
                 - Name: theSources
               OutputArtifacts:
                 - Name: wheelOutput
+            - Name: BuildPublishImage
+              RunOrder: 2
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Configuration:
+                ProjectName:
+                  Ref: imageProject
+              InputArtifacts:
+                - Name: theSources
+              OutputArtifacts:
+                - Name: imageOutput
