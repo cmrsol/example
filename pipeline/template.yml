@@ -42,6 +42,8 @@ Resources:
             Value: us-east-1
           - Name: image_name
             Value: example-server
+          - Name: module_name
+            Value: example
       Source:
         BuildSpec: deployment/buildspec.yml
         Type: CODEPIPELINE

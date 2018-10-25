@@ -1,14 +1,13 @@
 #!/bin/bash
 set -e
-set +x
-
-
+echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 if [ -z "${region}" ]; then
     region=us-east-1
 fi
 
 version=$(python -c "import ${module_name}; print(${module_name}.__version__)" 2>/dev/null)
-echo "Build environment: "; env
+echo "Build environment: "
+env
 
 if [ "${mode}" == "build_wheel" ]; then
     echo "Building the wheel"
