@@ -1,5 +1,5 @@
 ###############################################################################
-#
+# Create the CI/CD deployment pipeline of an example project.
 ###############################################################################
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Example CI/CD CodePipeline
@@ -21,7 +21,8 @@ Parameters:
 
 Resources:
   ##############################################################################
-  #
+  # Build a Python wheel, this wheel is the Flask application to solve the
+  # problem at hand.
   ##############################################################################
   wheelProject:
     Type: AWS::CodeBuild::Project
@@ -40,19 +41,23 @@ Resources:
         EnvironmentVariables:
           - Name: mode
             Value: build_wheel
-          - Name: region
-            Value: us-east-1
           - Name: image_name
             Value: example-server
           - Name: module_name
             Value: example
+          - Name: region
+            Value: 
+              Ref: AWS::Region
+          - Name: account_id
+            Value:
+              Ref: AWS::AccountId
       Source:
         BuildSpec: deployment/buildspec.yml
         Type: CODEPIPELINE
       TimeoutInMinutes: 60
 
   ##############################################################################
-  #
+  # Build a Docker image with the previously created Python wheel installed
   ##############################################################################
   imageProject:
     Type: AWS::CodeBuild::Project
@@ -71,12 +76,13 @@ Resources:
         EnvironmentVariables:
           - Name: mode
             Value: build_image
-          - Name: region
-            Value: us-east-1
           - Name: image_name
             Value: example-server
           - Name: module_name
             Value: example
+          - Name: region
+            Value: 
+              Ref: AWS::Region
           - Name: account_id
             Value:
               Ref: AWS::AccountId
@@ -86,7 +92,7 @@ Resources:
       TimeoutInMinutes: 60
 
   ##############################################################################
-  #
+  # Deploy the Docker image created into a Fargate cluster. 
   ##############################################################################
   fargateDeploy:
     Type: AWS::CodeBuild::Project
@@ -105,12 +111,13 @@ Resources:
         EnvironmentVariables:
           - Name: mode
             Value: deploy_fargate
-          - Name: region
-            Value: us-east-1
           - Name: image_name
             Value: example-server
           - Name: module_name
             Value: example
+          - Name: region
+            Value: 
+              Ref: AWS::Region
           - Name: account_id
             Value:
               Ref: AWS::AccountId
@@ -120,7 +127,10 @@ Resources:
       TimeoutInMinutes: 60
 
   ##############################################################################
-  #
+  # Create the CodePipeline. The anatomy of most of my pipelines:
+  # 2 ... n stages
+  # Each stage has 1 ... n actions that do the real work
+  # Actions are where the CodeBuild things are put into play
   ##############################################################################
   thePipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -133,10 +143,15 @@ Resources:
         Type: S3
         Location:
           Ref: artifactsBucket
+           
+      ##########################################################################
+      # Stages are where the work gets done. The first stage is usually
+      # getting source from somewhere.
+      ##########################################################################
       Stages:
         - Name: Source
           Actions:
-            - Name: SourceAction
+            - Name: GetExampleSource
               RunOrder: 1
               ActionTypeId:
                 Category: Source
@@ -149,8 +164,11 @@ Resources:
                 BranchName:
                   Ref: theSourceBranch
               OutputArtifacts:
-                - Name: theSources
+                - Name: exampleSource
 
+      ##########################################################################
+      # Build and publish the wheel and the Docker image.
+      ##########################################################################
         - Name: BuildPublish
           Actions:
             - Name: BuildPublishWheel
@@ -164,9 +182,10 @@ Resources:
                 ProjectName:
                   Ref: wheelProject
               InputArtifacts:
-                - Name: theSources
+                - Name: exampleSource
               OutputArtifacts:
                 - Name: wheelOutput
+
             - Name: BuildPublishImage
               RunOrder: 2
               ActionTypeId:
@@ -178,10 +197,13 @@ Resources:
                 ProjectName:
                   Ref: imageProject
               InputArtifacts:
-                - Name: theSources
+                - Name: exampleSource
               OutputArtifacts:
                 - Name: imageOutput
 
+      ##########################################################################
+      # Create / Update the cluster with a CloudFormation stack.
+      ##########################################################################
         - Name: DeployCluster
           Actions:
             - Name: ExampleCluster
@@ -195,6 +217,6 @@ Resources:
                 ProjectName:
                   Ref: fargateDeploy
               InputArtifacts:
-                - Name: theSources
+                - Name: exampleSource
               OutputArtifacts:
                 - Name: deployOutput
