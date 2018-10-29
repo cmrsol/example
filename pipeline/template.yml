@@ -149,9 +149,9 @@ Resources:
       # getting source from somewhere.
       ##########################################################################
       Stages:
-        - Name: Source
+        - Name: GetExampleSource
           Actions:
-            - Name: GetExampleSource
+            - Name: ExampleSource
               RunOrder: 1
               ActionTypeId:
                 Category: Source
