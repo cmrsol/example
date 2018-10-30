@@ -111,6 +111,8 @@ Resources:
         EnvironmentVariables:
           - Name: mode
             Value: deploy_fargate
+          - Name: cluster_name
+            Value: example-cluster
           - Name: image_name
             Value: example-server
           - Name: module_name

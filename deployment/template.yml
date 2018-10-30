@@ -198,39 +198,84 @@ Resources:
         Fn::ImportValue: exampleRoleArnV2
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
-  exampleServiceScalingPolicy:
+  queueLengthScaleUpPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: AStepPolicy
+      PolicyName: QueueLengthScaleUp
       PolicyType: StepScaling
       ScalingTargetId:
         Ref: exampleServiceScalingTarget
       StepScalingPolicyConfiguration:
-        AdjustmentType: PercentChangeInCapacity
+        AdjustmentType: ChangeInCapacity
         Cooldown: 60
         MetricAggregationType: Average
         StepAdjustments:
           - MetricIntervalLowerBound: 0
-            ScalingAdjustment: 200
-  lab500sAlarmScaleUp:
+            MetricIntervalUpperBound: 10
+            ScalingAdjustment: 1
+          - MetricIntervalLowerBound: 10
+            MetricIntervalUpperBound: 20
+            ScalingAdjustment: 2
+          - MetricIntervalLowerBound: 20
+            MetricIntervalUpperBound: 30
+            ScalingAdjustment: 4
+          - MetricIntervalLowerBound: 30
+            MetricIntervalUpperBound: 40
+            ScalingAdjustment: 5
+          - MetricIntervalLowerBound: 40
+            MetricIntervalUpperBound: 50
+            ScalingAdjustment: 6
+          - MetricIntervalLowerBound: 50
+            MetricIntervalUpperBound: 60
+            ScalingAdjustment: 7
+          - MetricIntervalLowerBound: 60
+            ScalingAdjustment: 8
+  queueServiceScaleDownPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: QueueLengthScaleDown
+      PolicyType: StepScaling
+      ScalingTargetId:
+        Ref: exampleServiceScalingTarget
+      StepScalingPolicyConfiguration:
+        AdjustmentType: ChangeInCapacity
+        Cooldown: 60
+        MetricAggregationType: Average
+        StepAdjustments:
+          - MetricIntervalUpperBound: 0
+            ScalingAdjustment: -100
+  queueLengthAlarmHigh:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      AlarmActions:
-        - Ref: exampleServiceScalingPolicy
-      AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
-      ComparisonOperator: GreaterThanThreshold
-      Dimensions:
-        - Name: LoadBalancer
-          Value:
-            Fn::GetAtt:
-              - exampleALB
-              - LoadBalancerFullName
       EvaluationPeriods: '1'
-      MetricName: HTTPCode_ELB_5XX_Count
-      Namespace: AWS/ApplicationELB
-      Period: '60'
       Statistic: Average
-      Threshold: '10'
+      Threshold: '1'
+      AlarmDescription: Alarm if queue length is >= 1 for one minute
+      Period: '60'
+      AlarmActions:
+        - Ref: queueLengthScaleUpPolicy
+      Namespace: AWS/SQS
+      Dimensions:
+        - Name: QueueName
+          Value: example-queue
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      MetricName: ApproximateNumberOfMessagesVisible
+  queueLengthAlarmEmpty:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      EvaluationPeriods: '1'
+      Statistic: Average
+      Threshold: '1'
+      AlarmDescription: Alarm if queue length is <1 for one minute
+      Period: '60'
+      AlarmActions:
+        - Ref: queueServiceScaleDownPolicy
+      Namespace: AWS/SQS
+      Dimensions:
+        - Name: QueueName
+          Value: example-queue
+      ComparisonOperator: LessThanThreshold
+      MetricName: ApproximateNumberOfMessagesVisible
   labListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     DependsOn: exampleALBListener
