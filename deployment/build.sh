@@ -1,17 +1,6 @@
 #!/bin/bash
 set -e # exit on any error
-set +x # do print evey command
-
-if [ -z "${region}" ]; then
-    region=us-east-1
-fi
-
-if [ -z "${cluster_name}" ]; then
-     cluster_name=example-cluster
-fi
-
 version=$(python -c "import ${module_name}; print(${module_name}.__version__)" 2>/dev/null)
-echo "Build environment: "; env
 
 if [ "${mode}" == "build_wheel" ]; then
     echo "Building the wheel"
