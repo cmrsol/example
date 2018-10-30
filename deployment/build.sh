@@ -24,8 +24,8 @@ elif [ "${mode}" == "deploy_fargate" ]; then
     echo Deploying Fargate Cluster
     cd deployment
     stackility upsert -i config/prod.ini
-    service_name=$(aws ecs list-services --cluster ${cluster_name} --output text | awk -F'/' '{print $2}')
-    aws ecs update-service --force-new-deployment --service ${service_name} --cluster ${cluster_name}
+    service_name=$(aws ecs list-services --cluster ${cluster_name} --output text --region ${region} | awk -F'/' '{print $2}')
+    aws ecs update-service --force-new-deployment --service ${service_name} --cluster ${cluster_name} --region ${region}
 else
     echo "Build mode not set"
     exit 1
