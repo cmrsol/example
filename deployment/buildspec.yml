@@ -1,13 +1,24 @@
+###############################################################################
+# Describe what happens in all the CodeBuild projects
+###############################################################################
 version: 0.2
 
 phases:
+  #############################################################################
+  # Install all the needed tools into the current build container
+  #############################################################################
   install:
     commands:
       - echo Installing tools
       - pip install -Ur deployment/requirements.txt
+
   pre_build:
     commands:
       - echo Nothing to do in pre_build
+
+  #############################################################################
+  # Specify the actual work, here it is very simply calling a script
+  #############################################################################
   build:
     commands:
       - echo Build started at $(date)
