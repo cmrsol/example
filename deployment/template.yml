@@ -211,25 +211,13 @@ Resources:
         MetricAggregationType: Average
         StepAdjustments:
           - MetricIntervalLowerBound: 0
-            MetricIntervalUpperBound: 10
+            MetricIntervalUpperBound: 1
             ScalingAdjustment: 1
-          - MetricIntervalLowerBound: 10
+          - MetricIntervalLowerBound: 1
             MetricIntervalUpperBound: 20
-            ScalingAdjustment: 2
+            ScalingAdjustment: 1
           - MetricIntervalLowerBound: 20
-            MetricIntervalUpperBound: 30
-            ScalingAdjustment: 4
-          - MetricIntervalLowerBound: 30
-            MetricIntervalUpperBound: 40
-            ScalingAdjustment: 5
-          - MetricIntervalLowerBound: 40
-            MetricIntervalUpperBound: 50
-            ScalingAdjustment: 6
-          - MetricIntervalLowerBound: 50
-            MetricIntervalUpperBound: 60
-            ScalingAdjustment: 7
-          - MetricIntervalLowerBound: 60
-            ScalingAdjustment: 8
+            ScalingAdjustment: 2
   queueServiceScaleDownPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
