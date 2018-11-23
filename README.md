@@ -1,41 +1,39 @@
+## Example stucture:
 ```
-├── clean.sh
+├── clean.sh                      # Clean the cruft for a fresh build
 ├── deployment
-│   ├── build.sh
-│   ├── buildspec.yml
+│   ├── build.sh                  # CodePipeline worker
+│   ├── buildspec.yml             # CodePipeline description file
 │   ├── code_pipeline
-│   │   ├── config.ini
-│   │   └── template.yml
-│   ├── config
+│   │   ├── config.ini            # CloudFormation parameters for a CodePipeline
+│   │   └── template.yml          # CloudFormation template for a CodePipeline
+│   ├── template.yml              # CloudFormation template for Fargate cluster
+│   ├── config                    # CloudFormation parameters for Fargate cluster
 │   │   └── prod.ini
-│   ├── requirements.txt
-│   ├── template.yml
-│   └── verify_unique_version.py
+│   ├── requirements.txt          # List of required Python modules/tools
+│   └── verify_unique_version.py  # Python script to verify a new vertion
 ├── docker-image
 │   ├── app
-│   │   └── example.ini
-│   ├── Dockerfile
-│   ├── nginx.conf
-│   └── run_example_app.sh
+│   │   └── example.ini           # uWsgi config file for the example application
+│   ├── Dockerfile                # Definition file for the example Docker image
+│   ├── nginx.conf                # nginx config file for the example application
+│   └── run_example_app.sh        # [CMD] script for the Docker image
 ├── example
 │   ├── __init__.py
 │   └── service
-│       ├── example.py
+│       ├── example.py            # The Flask application to be deployed in Fargate
 │       └── __init__.py
 ├── iam
 │   ├── deploy
-│   │   ├── config.ini
-│   │   └── template.yml
+│   │   ├── config.ini            # CloudFormation parameters for deploy IAM role
+│   │   └── template.yml          # CloudFormation template for deploy IAM role
 │   └── project
-│       ├── config.ini
-│       └── template.yml
+│       ├── config.ini            # CloudFormation parameters for Fargate app IAM role
+│       └── template.yml          # CloudFormation template for Fargate app IAM role
 ├── README.md
-├── setup.cfg
-├── setup.py
+├── setup.cfg                     # Example Python wheel configuration
+├── setup.py                      # Example Python wheel setup module
 └── vpc
-    ├── config
-    │   ├── east-2.ini
-    │   └── west-2.ini
-    ├── config.ini
-    └── template.yml
+    ├── config.ini                # CloudFormation parameters for a VPC to hold the app
+    └── template.yml              # CloudFormation template for a VPC to hold the app
 ```
