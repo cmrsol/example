@@ -1,9 +1,27 @@
 #### Example Description:
 
-This project is an attempt to completely implement a Fargate cluster from nothing.
-There are two prerequisites:
-1. The *ARN* of an existing *AWS Certificate Manager* certificate
+This project is an attempt to completely implement an *AWS Fargate* cluster from nothing.
+
+There are some prerequisites:
+1. An installation of `bash` and the `AWS CLI`.
 2. A registered domain served by *AWS Route53* and the associated *Hosted Zone ID*
+3. The *ARN* of an existing *AWS Certificate Manager* certificate
+4. A *AWS S3* bucket for artifacts
+
+
+In the root of the project you will find a `build.sh` file. When you execute this file
+it ask for the *Hosted Zone ID* and *ACM certificate ARN* and place them into *SSM*. Then
+it will do all the needed bits to create deploy the *AWS Fargate* cluster using *CodePipeline*
+
+In broad strokes the `build.sh` file will:
+
+* Create and activate a python virtual environment in `/tmp`
+* Install some python tools into the `venv`, notably [Stackility](https://github.com/muckamuck/stackility).
+* Use Stackility / CloudFormation to create a new VPC.
+* Use Stackility / CloudFormation to create a deployment IAM role
+* Use Stackility / CloudFormation to deploy the *Fargate cluster*
+* Use Stackility / CloudFormation to create an *AWS CodePipeline* for the changes to the cluster.
+
 
 #### Example Stucture:
 
