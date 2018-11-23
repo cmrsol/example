@@ -1,4 +1,12 @@
-## Example stucture:
+#### Example Description:
+
+This project is an attempt to completely implement a Fargate cluster from nothing.
+There are two prerequisites:
+1. The *ARN* of an existing *AWS Certificate Manager* certificate
+2. A registered domain served by *AWS Route53* and the associated *Hosted Zone ID*
+
+#### Example Stucture:
+
 ```
 ├── clean.sh                      # Clean the cruft for a fresh build
 ├── deployment
