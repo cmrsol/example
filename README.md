@@ -1,6 +1,6 @@
 #### Example Description:
 
-This project is an attempt to completely implement an *AWS Fargate* cluster from nothing 
+This project is an attempt to completely implement an *AWS Fargate* cluster from nothing in `us-east-1` region
 (except the prerequisites noted below).
 
 
@@ -11,7 +11,7 @@ There are some prerequisites:
 4. A *AWS S3* bucket for artifacts
 
 
-*Note: you will need to tweak the following INI files for your own situation before running `build.sh`:*
+*Note: you will need to tweak the following INI files for your own situation before running `build-example.sh`:*
 
 * `vpc/config.ini` - configuration for the VPC that will be constucted
 * `iam/deploy/config.ini` - configuration for the IAM deploy role
