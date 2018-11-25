@@ -1,6 +1,7 @@
 #### Example Description:
 
-This project is an attempt to completely implement an *AWS Fargate* cluster from nothing.
+This project is an attempt to completely implement an *AWS Fargate* cluster from nothing. 
+
 
 There are some prerequisites:
 1. An installation of `bash` and the `AWS CLI`.
@@ -8,6 +9,14 @@ There are some prerequisites:
 3. The *ARN* of an existing *AWS Certificate Manager* certificate
 4. A *AWS S3* bucket for artifacts
 
+
+*Note: you will need to tweak the following INI files for your own situation:*
+
+* ```vpc/config.ini``` - configuration for the VPC that will be constucted
+* ```iam/deploy/config.ini``` - configuration for the IAM deploy role
+* ```iam/project/config.ini``` - configuration for the IAM cluster run role
+* ```deployment/code_pipeline/config.ini``` - configuration of the CodePipeline
+* ```deployment/config/prod.ini``` - configuration for the CodePipeline
 
 In the root of the project you will find a `build.sh` file. When you execute this file
 it ask for the *Hosted Zone ID* and *ACM certificate ARN* and place them into *SSM*. Then
@@ -34,8 +43,8 @@ In broad strokes the `build.sh` file will:
 │   │   ├── config.ini            # CloudFormation parameters for a CodePipeline
 │   │   └── template.yml          # CloudFormation template for a CodePipeline
 │   ├── template.yml              # CloudFormation template for Fargate cluster
-│   ├── config                    # CloudFormation parameters for Fargate cluster
-│   │   └── prod.ini
+│   ├── config
+│   │   └── prod.ini              # CloudFormation parameters for Fargate cluster
 │   ├── requirements.txt          # List of required Python modules/tools
 │   └── verify_unique_version.py  # Python script to verify a new vertion
 ├── docker-image
