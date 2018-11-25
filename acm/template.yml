@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: An ACM cert
+Parameters:
+  certHostName:
+    Description: The name of the hosted zone
+    Type: String
+  alternateCertHostName:
+    Description: The name of the hosted zone
+    Type: String
+  verificationHostName:
+    Description: The name of the hosted zone
+    Type: String
+Resources:
+  labCert:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName:
+        Ref: verificationHostName
+      SubjectAlternativeNames:
+        - Ref: certHostName
+      DomainValidationOptions:
+        - DomainName:
+            Ref: verificationHostName
+          ValidationDomain:
+            Ref: verificationHostName
+Outputs:
+  labCert:
+    Description: The the VPC
+    Value:
+      Ref: labCert
+    Export:
+      Name: mknoteCertV1
