@@ -1,6 +1,7 @@
 #### Example Description:
 
-This project is an attempt to completely implement an *AWS Fargate* cluster from nothing. 
+This project is an attempt to completely implement an *AWS Fargate* cluster from nothing 
+(except the prerequisites noted below).
 
 
 There are some prerequisites:
@@ -10,16 +11,20 @@ There are some prerequisites:
 4. A *AWS S3* bucket for artifacts
 
 
-*Note: you will need to tweak the following INI files for your own situation:*
+*Note: you will need to tweak the following INI files for your own situation before running `build.sh`:*
 
-* ```vpc/config.ini``` - configuration for the VPC that will be constucted
-* ```iam/deploy/config.ini``` - configuration for the IAM deploy role
-* ```iam/project/config.ini``` - configuration for the IAM cluster run role
-* ```deployment/code_pipeline/config.ini``` - configuration of the CodePipeline
-* ```deployment/config/prod.ini``` - configuration for the CodePipeline
+* `vpc/config.ini` - configuration for the VPC that will be constucted
+* `iam/deploy/config.ini` - configuration for the IAM deploy role
+* `iam/project/config.ini` - configuration for the IAM cluster run role
+* `deployment/code_pipeline/config.ini` - configuration of the CodePipeline
+* `deployment/config/prod.ini` - configuration for the CodePipeline
+
+---
+
+#### Building the Example:
 
 In the root of the project you will find a `build.sh` file. When you execute this file
-it ask for the *Hosted Zone ID* and *ACM certificate ARN* and place them into *SSM*. Then
+it will ask for the *Hosted Zone ID* and *ACM certificate ARN* and place them into *SSM*. Then
 it will do all the needed bits to create deploy the *AWS Fargate* cluster using *CodePipeline*
 
 In broad strokes the `build.sh` file will:
@@ -31,6 +36,7 @@ In broad strokes the `build.sh` file will:
 * Use Stackility / CloudFormation to deploy the *Fargate cluster*
 * Use Stackility / CloudFormation to create an *AWS CodePipeline* for the changes to the cluster.
 
+---
 
 #### Example Stucture:
 
