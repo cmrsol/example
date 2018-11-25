@@ -1,2 +1,4 @@
 .ropeproject/
 x
+nohup.out
+*.pyc
