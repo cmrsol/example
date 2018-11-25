@@ -3,3 +3,4 @@ twine>=1.12.1
 Stackility>=0.6
 boto3>=1.9
 iam_role_assumer>=0.0.2
+bumpversion
