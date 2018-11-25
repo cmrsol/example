@@ -23,14 +23,15 @@ There are some prerequisites:
 
 #### Building the Example:
 
-In the root of the project you will find a `build.sh` file. When you execute this file
+In the root of the project you will find a `build-example.sh` file. When you execute this file
 it will ask for the *Hosted Zone ID* and *ACM certificate ARN* and place them into *SSM*. Then
 it will do all the needed bits to create deploy the *AWS Fargate* cluster using *CodePipeline*
 
-In broad strokes the `build.sh` file will:
+In broad strokes the `build-example.sh` file will:
 
+* Ask for the ARN of the ACM certificate and the Route53 zone ID
 * Create and activate a python virtual environment in `/tmp`
-* Install some python tools into the `venv`, notably [Stackility](https://github.com/muckamuck/stackility).
+* Install some python tools into the virtual environment, notably [Stackility](https://github.com/muckamuck/stackility).
 * Use Stackility / CloudFormation to create a new VPC.
 * Use Stackility / CloudFormation to create a deployment IAM role
 * Use Stackility / CloudFormation to deploy the *Fargate cluster*
@@ -42,6 +43,8 @@ In broad strokes the `build.sh` file will:
 
 ```
 ├── clean.sh                      # Clean the cruft for a fresh build
+├── build-example.sh              # Build the example after tweaking the INI files
+├── smash-example.sh              # Remove all the resources created by build-example.sh
 ├── deployment
 │   ├── build.sh                  # CodePipeline worker
 │   ├── buildspec.yml             # CodePipeline description file
