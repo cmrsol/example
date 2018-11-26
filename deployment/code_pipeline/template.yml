@@ -6,6 +6,10 @@ Description: Example CI/CD CodePipeline
 Parameters:
   artifactsBucket:
     Type: String
+  clusterName:
+    Type: String
+  wheelBucket:
+    Type: String
   theSourceRepo:
     Type: String
   theSourceBranch:
@@ -47,7 +51,7 @@ Resources:
             Value: example
           - Name: bucket
             Value: 
-              Ref: artifactsBucket
+              Ref: wheelBucket
           - Name: region
             Value: 
               Ref: AWS::Region
@@ -85,7 +89,7 @@ Resources:
             Value: example
           - Name: bucket
             Value: 
-              Ref: artifactsBucket
+              Ref: wheelBucket
           - Name: region
             Value: 
               Ref: AWS::Region
@@ -121,9 +125,12 @@ Resources:
             Value: example-server
           - Name: module_name
             Value: example
+          - Name: cluster_name
+            Value:
+              Ref: clusterName
           - Name: bucket
             Value: 
-              Ref: artifactsBucket
+              Ref: wheelBucket
           - Name: region
             Value: 
               Ref: AWS::Region
