@@ -18,4 +18,4 @@ bumpversion patch
 (cd vpc; stackility upsert -i config.ini)
 (cd iam/deploy; stackility upsert -i config.ini)
 (cd iam/project; stackility upsert -i config.ini)
-(cd deployment; stackility upsert -i config/prod.ini)
+(cd deployment/code_pipeline/; stackility upsert -i config.ini)

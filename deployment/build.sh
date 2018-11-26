@@ -6,13 +6,13 @@ if [ "${mode}" == "build_wheel" ]; then
     echo "Building the wheel"
     python deployment/verify_unique_version.py ${image_name} ${version}
     python setup.py sdist bdist_wheel
-    aws s3 cp dist/example-${version}-py3-none-any.whl s3://static.mknote.us/artifacts/example/example-${version}-py3-none-any.whl
+    aws s3 cp dist/example-${version}-py3-none-any.whl s3://${bucket}/artifacts/example/example-${version}-py3-none-any.whl
 elif [ "${mode}" == "build_image" ]; then
     echo Logging in to Amazon ECR in region=${region}
     $(aws ecr get-login --no-include-email --region ${region})
 
     echo "Building the docker image"
-    (cd docker-image; docker build -t ${image_name} --build-arg VERSION=${version} .)
+    (cd docker-image; docker build -t ${image_name} --build-arg VERSION=${version} --build-arg BUCKET=${bucket} .)
 
     echo "Publising the docker image"
     docker tag ${image_name} ${account_id}.dkr.ecr.${region}.amazonaws.com/${image_name}:latest

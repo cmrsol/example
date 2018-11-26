@@ -45,6 +45,9 @@ Resources:
             Value: example-server
           - Name: module_name
             Value: example
+          - Name: bucket
+            Value: 
+              Ref: artifactsBucket
           - Name: region
             Value: 
               Ref: AWS::Region
@@ -80,6 +83,9 @@ Resources:
             Value: example-server
           - Name: module_name
             Value: example
+          - Name: bucket
+            Value: 
+              Ref: artifactsBucket
           - Name: region
             Value: 
               Ref: AWS::Region
@@ -115,6 +121,9 @@ Resources:
             Value: example-server
           - Name: module_name
             Value: example
+          - Name: bucket
+            Value: 
+              Ref: artifactsBucket
           - Name: region
             Value: 
               Ref: AWS::Region

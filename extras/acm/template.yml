@@ -29,4 +29,4 @@ Outputs:
     Value:
       Ref: labCert
     Export:
-      Name: mknoteCertV1
+      Name: labCertV1

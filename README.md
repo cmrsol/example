@@ -9,6 +9,7 @@ There are some prerequisites:
 2. A registered domain served by *AWS Route53* and the associated *Hosted Zone ID*
 3. The *ARN* of an existing *AWS Certificate Manager* certificate
 4. A *AWS S3* bucket for artifacts
+5. This repo pushed into a CodeCommit repo called `example`
 
 
 *Note: you will need to tweak the following INI files for your own situation before running `build-example.sh`:*
@@ -34,8 +35,9 @@ In broad strokes the `build-example.sh` file will:
 * Install some python tools into the virtual environment, notably [Stackility](https://github.com/muckamuck/stackility).
 * Use Stackility / CloudFormation to create a new VPC.
 * Use Stackility / CloudFormation to create a deployment IAM role
-* Use Stackility / CloudFormation to deploy the *Fargate cluster*
 * Use Stackility / CloudFormation to create an *AWS CodePipeline* for the changes to the cluster.
+
+The stack for the CodePipeline will deploy the example.
 
 ---
 

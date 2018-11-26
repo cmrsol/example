@@ -77,7 +77,13 @@ Resources:
       ContainerDefinitions:
         - Essential: 'true'
           Image:
-            Ref: taskImage
+            Fn::Join:
+              - ''
+              - - Ref: AWS::AccountId
+                - '.dkr.ecr.'
+                - Ref: AWS::Region
+                - '.amazonaws.com/'
+                - Ref: taskImage
           LogConfiguration:
             LogDriver: awslogs
             Options:
