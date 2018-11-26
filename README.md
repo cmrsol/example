@@ -83,3 +83,7 @@ The stack for the CodePipeline will deploy the example.
     ├── config.ini                # CloudFormation parameters for a VPC to hold the app
     └── template.yml              # CloudFormation template for a VPC to hold the app
 ```
+
+---
+
+v1.0.6
