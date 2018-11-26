@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
     name="example",
-    version="1.0.11",
+    version="1.0.12",
     packages=find_packages(),
     description='Python Example Module',
     author='chuck.muckamuck@gmail.com',
