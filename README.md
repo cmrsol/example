@@ -86,4 +86,4 @@ The stack for the CodePipeline will deploy the example.
 
 ---
 
-v1.0.8
+v1.0.9
