@@ -16,7 +16,7 @@ RUN chmod 644 /app/*.ini
 RUN mkdir -p /var/lib/nginx/tmp; \
     chmod 777 /var/lib/nginx/tmp
 
-RUN pip install http://${BUCKET}/artifacts/example/example-${VERSION}-py3-none-any.whl
+RUN pip install http://${BUCKET}.s3-website-us-east-1.amazonaws.com/artifacts/example/example-${VERSION}-py3-none-any.whl
 
 EXPOSE 80
 STOPSIGNAL SIGTERM
