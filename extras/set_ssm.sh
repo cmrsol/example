@@ -1,8 +1,8 @@
 #!/bin/bash
 
 set +e
-acm_arn=$(aws ssm get-parameter --name /example/acmARN --with-decryption --output text --region us-east-1 2>/dev/null | awk '{print $NF}' 2>/dev/null)
-zone_id=$(aws ssm get-parameter --name /example/hostedZoneId --with-decryption --output text --region us-east-1 2>/dev/null | awk '{print $NF}' 2>/dev/null)
+acm_arn=$(aws ssm get-parameter --name /example/acmARN --with-decryption --output text --region us-east-1 2>/dev/null | awk '{print $(NF - 1)}' 2>/dev/null)
+zone_id=$(aws ssm get-parameter --name /example/hostedZoneId --with-decryption --output text --region us-east-1 2>/dev/null | awk '{print $(NF - 1)}' 2>/dev/null)
 
 if [ -z "${acm_arn}" ]; then
     echo -n "Enter ACM certificate ARN: "; read acm_arn
